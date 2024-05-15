@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import UserList from './UserList';
+import Alert from 'react-bootstrap/Alert';
+
+import useFetchData from './hooks/useFetchData';
 
 function App() {
+  const [listOfUsers, setListOfUsers] = useState([]);
+  const [error, setError] = useState(null);
+
+  useFetchData('https://jsonplaceholder.typicode.com/users', setError, setListOfUsers);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      {(error !== null) && 
+        (
+          <Alert variant="danger">
+            <Alert.Heading>Oh! An error occured!</Alert.Heading>
+            <p>
+              {error}
+            </p>
+            <hr />
+            <p className="mb-0">
+              Please reload the page!
+            </p>
+          </Alert>
+        )
+      } 
+      <UserList ListOfUsers={listOfUsers}></UserList>
     </div>
   );
 }
